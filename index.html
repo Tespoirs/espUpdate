@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 OTA Update</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>ESP32 OTA Update</h1>
+    <form id="upload-form" enctype="multipart/form-data" method="post">
+        <input type="file" name="firmware" id="firmware" accept=".bin"><br><br>
+        <input type="submit" value="Upload Firmware">
+    </form>
+
+    <script>
+        document.getElementById('upload-form').onsubmit = async function(e) {
+            e.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('firmware');
+            if (fileInput.files.length > 0) {
+                formData.append('firmware', fileInput.files[0]);
+                const response = await fetch('http://localhost:8080/ota', { // Adjust the URL if needed
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.text();
+                alert(result);
+            } else {
+                alert('Please select a firmware file.');
+            }
+        }
+    </script>
+</body>
+</html>
